@@ -7,6 +7,8 @@ const noteInput = document.querySelector("#note-content")
 
 const searchInput = document.querySelector('#search-input')
 
+const exportBtn = document.querySelector('#export-notes')
+
 // funções
 function showNotes() {
   cleanNotes()
@@ -198,6 +200,29 @@ const searchNotes = (search) => {
 
 }
 
+function exportData() {
+  const notes = getNotes()
+
+  // separa o dado por , e quebra a linha pelo caractere \n
+
+  const csvString = [
+    ["ID", "Conteúdo", "Fixed"],
+    ...notes.map((note) => [note.id, note.content, note.fixed])
+  ].map((e) => e.join(",")).join("\n")
+
+
+  const element = document.createElement('a')
+
+  element.href = "data:text/csv;charset=utf-8," + encodeURI(csvString)
+
+  element.target = '_blank'
+
+  element.download = 'notes.csv'
+
+  element.click()
+}
+
+
 // Ls
 
 function saveNotes(notes) {
@@ -232,6 +257,11 @@ searchInput.addEventListener('keyup', (e) => {
   searchNotes(search)
 
 })
+
+exportBtn.addEventListener('click', () => {
+  exportData()
+})
+
 function showNotes() {
   cleanNotes()
 
@@ -241,6 +271,6 @@ function showNotes() {
   })
 }
 
+
 // inicialização
 showNotes()
-
